@@ -132,11 +132,11 @@ git clone https://github.com/danielmiessler/SecLists.git
 
 | Название | Назначение |
 |----------|------------|
-| `common.txt` | Базовый аудит директорий |
-| `directory-list-2.3-medium.txt` | Глубокий аудит |
-| `raft-large-directories.txt` | Максимальное покрытие |
-| `burp-parameter-names.txt` | Имена параметров |
-| `sql-injection.txt` | SQL-инъекции |
+| [common.txt](https://github.com/danielmiessler/SecLists/blob/master/Discovery/Web-Content/common.txt) | Базовый аудит директорий |
+| [directory-list-2.3-medium.txt](https://github.com/danielmiessler/SecLists/blob/master/Discovery/Web-Content/directory-list-2.3-medium.txt) | Глубокий аудит |
+| [raft-large-directories.txt](https://github.com/danielmiessler/SecLists/blob/master/Discovery/Web-Content/raft-large-directories.txt) | Максимальное покрытие |
+| [burp-parameter-names.txt](https://github.com/danielmiessler/SecLists/blob/master/Discovery/Web-Content/burp-parameter-names.txt) | Имена параметров |
+| [sql-injection.txt](https://github.com/danielmiessler/SecLists/blob/master/Fuzzing/sql-injection.txt) | SQL-инъекции |
 
 ---
 
